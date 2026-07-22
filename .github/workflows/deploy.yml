@@ -1,0 +1,35 @@
+name: Desplegar sitio web HTML
+
+# Se activa cada vez que haces push a la rama main
+on:
+  push:
+    branches: ["main"]
+
+# Permisos necesarios para escribir en GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Paso 1: Descarga el código de tu repositorio
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # Paso 2: Configura GitHub Pages
+      - name: Configurar Pages
+        uses: actions/configure-pages@v4
+
+      # Paso 3: Empaqueta el archivo index.html
+      - name: Subir artefacto estático
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # Sube todos los archivos de la raíz (incluyendo index.html)
+
+      # Paso 4: Publica en internet
+      - name: Desplegar a GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
